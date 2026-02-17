@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  # ------------------------
+  # Scraper API (.NET 10)
+  # ------------------------
+  scraperapi:
+    image: casperjensen/scraperapi:latest
+    container_name: scraper-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "32777:8080"
+    networks:
+      - scraper-net
+
+  # ------------------------
+  # Grafana
+  # ------------------------
+  grafana:
+    image: grafana/grafana:latest
+    container_name: scraper_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - scraper-net
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+networks:
+  scraper-net:
+    driver: bridge
+
+volumes:
+  grafana_data:
