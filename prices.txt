@@ -6,3 +6,9 @@
 2026-02-10 09:18:56 - 5351
 2026-02-10 09:22:20 - 5351
 2026-02-10 09:23:58 - 5351
+2026-02-17 10:35:17 - 5288 - Computersalg.dk
+2026-02-17 10:35:18 - 5199.- - elgiganten.dk
+Computersalg.dk-product_name - 5288 - 2026-02-17 10:49:37 
+elgiganten.dk-product_name - 5199.- - 2026-02-17 10:49:37 
+Computersalg.dk product_name 5288 2026-02-17 10:50:26 
+elgiganten.dk product_name 5199.- 2026-02-17 10:50:27 
