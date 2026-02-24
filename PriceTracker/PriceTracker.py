@@ -1,11 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
+Simon_NewTest
 from datetime import datetime, timezone
 import schedule
 import time
 
 API_URL = "http://localhost:32777/api/scraper"
 
+from datetime import datetime
+import schedule
+import time
+
+# websites to track
 websites = [
     {
         'name': 'Computersalg.dk',
@@ -33,6 +39,7 @@ def parse_price(raw: str) -> float | None:
         print(f"  [!] Could not parse price: '{raw}'")
         return None
 
+
 def check_prices():
     print(f"\n--- Running price check at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ---\n")
     for site in websites:
@@ -40,6 +47,7 @@ def check_prices():
         try:
             page = requests.get(site['url'], headers={'User-Agent': 'Mozilla/5.0'})
             soup = BeautifulSoup(page.content, 'html.parser')
+
             raw_price = None
 
             if site['method'] == 'itemprop':
@@ -83,3 +91,41 @@ print("Scheduler running. Checks at 08:00 and 20:00 daily. Press Ctrl+C to stop.
 while True:
     schedule.run_pending()
     time.sleep(60)
+    
+            price = None
+
+            if site['method'] == 'itemprop':
+                price_element = soup.find(attrs={'itemprop': 'price'})
+                if price_element:
+                    price = price_element.get('content').strip()
+
+            elif site['method'] == '-mt-[6px] font-headline text-[3.5rem] leading-[3.5rem] justify-self-start':
+                price_element = soup.find(class_='-mt-[6px] font-headline text-[3.5rem] leading-[3.5rem] inc-vat')
+                if price_element:
+                    price = price_element.text.strip()
+
+            if price:
+                time_string = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                with open('prices.txt', 'a') as file:
+                    file.write(f"{site['name']} {'product_name'} {price} {time_string} \n")
+                print(f"Price found: {price}")
+            else:
+                print("Price not found")
+
+        except Exception as e:
+            print(f"Error checking {site['name']}: {e}")
+
+        print("")
+
+# It will check 08:00 in the morning and 20:00 in the evening every day
+schedule.every().day.at("08:00").do(check_prices)
+schedule.every().day.at("20:00").do(check_prices)
+
+# run in the startup to get an immediate price check
+check_prices()
+
+print("Scheduler running. Checks at 08:00 and 20:00 daily. You can obviously stop the loop by pressing Ctrl+C.\n")
+while True:
+    schedule.run_pending()
+    time.sleep(60)
+
