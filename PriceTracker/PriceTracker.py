@@ -1,5 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
+Simon_NewTest
+from datetime import datetime, timezone
+import schedule
+import time
+
+API_URL = "http://localhost:32777/api/scraper"
+
 from datetime import datetime
 import schedule
 import time
